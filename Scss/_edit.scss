@@ -1,0 +1,84 @@
+.edit{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 5px;
+
+    &-book{
+        width: 95%;
+        // display: flex;
+        // justify-content: center;
+        &__isbn{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+
+            input{
+                border-radius: 15px;
+                padding-left: 10px;
+                margin-left: 10px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+        }
+        &__title{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+            input{
+                border-radius: 15px;
+                padding-left: 10px;
+                margin-left: 10px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+        }
+        &__content{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            & textarea{
+                width: 100%;
+            }
+        }
+        &__rating{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+            input{
+                border-radius: 15px;
+                padding-left: 10px;
+                margin-left: 10px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+        }
+        &__btn{
+            margin: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &--button{
+                text-decoration: none;
+                background-color: $color1;
+                border: none;
+                height: 30px;
+                width: 60px;
+                border-radius: 15px;
+                &:hover{
+                    color: $primary-color;
+                    background-color: $btnhover;
+                    @include transition-ease;
+                }
+            }
+        }
+    }
+
+}

@@ -1,0 +1,27 @@
+section1{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    width: 100%;
+    padding-right: 20px;
+    padding-top: 5px;
+
+    .new{
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        &-link{
+            text-decoration: none;
+            border-radius: 20px;
+            width: 4rem;
+            height: 30px;
+            background-color: $color1;
+            border: none;
+            &:hover{
+                background-color: $btnhover;
+                @include transition-ease;
+                color: $primary-color;
+            }
+        }
+    }
+}

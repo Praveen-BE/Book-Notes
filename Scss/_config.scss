@@ -1,0 +1,21 @@
+$primary-color: white;
+$secondary-color: black;
+$inner-text: green;
+$color1: #00FF00;
+$color2: #A8F0A8;
+$color3: #D6F5D6;
+$btnhover: blue;
+$btnActive: yellow;
+$bar-hover: #A8F0A8;
+$delete: red;
+$timeColor: cadetblue;
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+@mixin transition-ease{
+    transition: all 0.5s ease-in-out;
+}

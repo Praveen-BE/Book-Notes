@@ -1,0 +1,46 @@
+<%- include("partials/header.ejs") %>
+
+<section1>
+    <form class="new" action="/" method="get">
+        <button class="new-link" type="submit">
+            Back
+        </button>
+    </form>
+</section1>
+
+<section3>
+    <div class="notes">
+        <div class="notes-title">
+            <h3 class="notes-title__head"><%= book.title %></h3>
+        </div>
+        <div class="notes-cover">
+            <img src="https://covers.openlibrary.org/b/isbn/<%=book.isbn%>-M.jpg" alt="book cover Image" class="notes-cover__img">
+        </div>
+       
+        <div class="notes-catagory">
+            <p class="notes-catagory__text">
+                Catagory : <%= book.catagory %>
+            </p>
+        </div>
+        <div class="notes-rating">
+            <p class="notes-rating__value">Recommended : <b><%= book.rating %>/10</b></p>
+        </div>
+        <div class="notes-content">
+            <p class="notes-content__summery">Book Summery <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= book.notes %>
+            </p>
+        </div>
+       
+        <div class="notes-date">
+            <p class="notes-date__text">
+                <%= book.date %>
+            </p>
+        </div>
+        <form class="notes-edit" method="get" action="/book/edit/<%=book.id%>">
+            <button class="notes-edit__btn" type="submit">Edit</button>
+        </form>
+        <div class="notes-delete" >
+            <a href="/book/delete/<%=book.id%>"><button class="notes-delete__btn">Delete</button></a>
+        </div>
+    </div>
+</section3>

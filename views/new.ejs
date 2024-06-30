@@ -1,0 +1,62 @@
+<%- include("partials/header.ejs") %>
+
+    <% if (locals.bookdata) { %>
+
+<section class="edit">
+        <form id="edit-book" action="/book/edited/<%=bookdata.id%>" method="post" class="edit-book">
+            <div class="edit-book__isbn">
+                <label for="isbn">ISBN No : </label>
+                <input type="text" name="isbn" id="isbn" placeholder="ISBN code" value="<%= bookdata.isbn %>">
+            </div>
+            <div class="edit-book__title">
+                <label for="mytitle"> Book title : </label>
+                <input type="text" name="title" id="mytitle" placeholder="Book Title" value="<%=bookdata.title%>">
+            </div>
+            <div class="edit-book__title">
+                <label for="mytitle"> Book Catagory : </label>
+                <input type="text" name="catagory" id="myCatagory" placeholder="Book catagory" value="<%=bookdata.catagory%>">
+            </div>
+            <div class="edit-book__content">
+                <label for="notes"> My Notes </label>
+                <textarea name="notes" id="notes" rows="20"><%=bookdata.notes%></textarea>
+            </div>
+            <div class="edit-book__rating">
+                <label for="rating"> My Recomandation : </label>
+                <input type="text" name="rating" id="rating" placeholder="rating" value="<%=bookdata.rating%>">
+            </div>
+            <div class="edit-book__btn">
+                <button class="edit-book__btn--button" type="submit">Submit</button>
+            </div>
+        </form>
+</section>
+
+    <% } else {%>
+
+<section class="new">      
+    <form id="new-book" action="/new/book" method="post" class="new-book">
+        <div class="new-book__isbn">
+            <label for="isbn">ISBN No : </label><input type="text" name="isbn" id="isbn" placeholder="ISBN code">
+        </div>
+        <div class="new-book__title">
+            <label for="mytitle"> Book title : </label><input type="text" name="title" id="mytitle" placeholder="Book Title">
+        </div>
+        <div class="edit-book__title">
+            <label for="mytitle"> Book Catagory : </label>
+            <input type="text" name="catagory" id="myCatagory" placeholder="Book catagory"">
+        </div>
+        <div class="new-book__content">
+            <label for="notes"> My Notes </label>
+            <textarea name="notes" id="notes" rows="20"></textarea>
+        </div>
+        <div class="new-book__rating">
+            <label for="rating"> My Rating : </label><input type="text" name="rating" id="rating" placeholder="rating">
+        </div>
+        <div class="new-book__btn">
+            <button class="new-book__btn--button" type="submit">Submit</button>
+        </div>
+    </form>
+</section>
+
+    <% } %>
+</body>
+</html>

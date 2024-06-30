@@ -1,0 +1,88 @@
+<body>
+<%- include("partials/header.ejs") %>
+<div class="catagory">
+    <div class="catagory-sort">
+        <label for="sort">Sort :</label>
+        <select name="sort" id="sort">
+            <option value="asce">Accending</option>
+            <option value="desc">Decending</option>
+            <option value="date">Best</option>
+            <option value="latest">Latest</option>
+            <option value="latest">Oldest</option>
+        </select>
+    </div>
+    <div class="catagory-filter">
+        <label for="filter">Filter :</label>
+        <select name="filter" id="filter">
+            <% books.forEach(book=>{ %>
+                <option value="<%= book.catagory %>"><%= book.catagory %></option>
+            <% }) %>
+            <!-- <option value="fiction">Fiction</option>
+            <option value="finance">Finance</option> -->
+        </select>
+    </div>
+    <div class="catagory-apply">
+        <button class="catagory-apply__btn">apply</button>
+    </div>
+  
+</div>
+
+<div class="search">
+    <input type="text" placeholder="Search">
+    <button class="search-btn">Search</button>
+</div>
+
+
+<hr>
+
+<section1>
+    <form class="new" action="/new" method="post">
+        <button class="new-link" type="submit">
+            New
+        </button>
+    </form>
+</section1>
+
+<section2>
+    <% books.forEach(book => {%>
+    <div class="books">
+        <div class="books-title">
+            <a href="/book/<%= book.id%>" class="books-title__head"><h3 ><%= book.title %></h3></a>
+        </div>
+        <div class="books-cover">
+            <a href="/book/<%= book.id%>">
+                <img src="https://covers.openlibrary.org/b/isbn/<%=book.isbn%>-M.jpg" alt="book cover Image" class="books-cover__img">
+            </a>
+        </div>
+        <div class="books-catagory">
+            <p class="books-catagory__text">
+                <%= book.catagory %>
+            </p>
+        </div>
+        <div class="books-content">
+            <a href="/book/<%= book.id%>">
+                <p class="books-content__summery">Books Summery <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= book.notes %>
+                </p>
+            </a>
+        </div>
+       
+        <form class="books-edit" method="get" action="/book/edit/<%=book.id%>">
+            <button class="books-edit__btn" type="submit">Edit</button>
+        </form>
+        <div class="books-delete" >
+            <a href="/book/delete/<%=book.id%>"><button class="books-delete__btn">Delete</button></a>
+        </div>
+        <div class="books-rating">
+            <p class="books-rating__value">Recommended : <b><%= book.rating %>/10</b></p>
+        </div>
+        <div class="books-date">
+            <p class="books-date__text">
+                <%= book.date %>
+            </p>
+        </div>
+    </div>
+    <%}); %>
+</section2>
+
+<%- include("partials/footer.ejs") %>
