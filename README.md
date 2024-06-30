@@ -1,10 +1,12 @@
 If You want Run this code
 $** download all files
-$** Install node modules and packages with command line in terminal ==>  npm i
-$** Run with command line in terminal ==> nodemon index.js
+$** Install node modules and packages with command line in terminal ==>  
+                                                                                      npm i
+$** Run with command line in terminal ==>
+                                                                                nodemon index.js
 
 
-                        ***Project Preparations***
+***Project Preparations***
 
 This is My One of the Capstone Project "My Book Notes"
 I type text file Before start the Project
