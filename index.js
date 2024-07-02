@@ -1,8 +1,11 @@
 import express from "express";
 import bodyParser from "body-parser";
+import pg from "pg";
+import env from "dotenv";
 
 const app = express();
 const port = 3000;
+env.config();
 
 app.use(express.static("public"));
 
@@ -13,31 +16,36 @@ app.use(bodyParser.urlencoded({extended: true}));
 // 0011270106 rich dad poor dad
 // 1847941834 atomic habits
 
-const booksObject = [
-    {
-        id: 1,
-        isbn: "9781612680019",
-        title: "Rich Dad Poor Dad",
-        catagory: "Finance",
-        notes: "1 Lorem ipsum dolor sit amet consectetur adipisicing elit.Ad dolorem aperiam magni voluptate placeat, adipisci incidunt dolore in voluptates veritatis vel animi facilis labore sed consequuntur, accusamus provident, ex mollitia.",
-        rating: 9,
-        date: "Sun Jun 30 2024 06:09:19 GMT+0530 (India Standard Time)",
-    },
-    {
-        id: 2,
-        isbn: "1847941834",
-        title: "Atomic Habits",
-        catagory: "Self Development",
-        notes: "2 Lorem ipsum dolor sit amet consectetur adipisicing elit.Ad dolorem aperiam magni voluptate placeat, adipisci incidunt dolore in voluptates veritatis vel animi facilis labore sed consequuntur, accusamus provident, ex mollitia.",
-        rating: 8,
-        date: "Sun Jun 30 2024 07:09:19 GMT+0530 (India Standard Time)",
-    },
-];
+const db = new pg.Client({
+    user: process.env.PG_USER,
+    host: process.env.PG_HOST,
+    database: process.env.PG_DATABASE,
+    password: process.env.PG_PASSWORD,
+    port: process.env.PG_PORT,
+});
+db.connect();
 
-let lastId = 2;
+async function best(){
+    const result = await db.query("select * from booksdata order by rating desc");
+    const bookItems = result.rows;
+    return bookItems;
+}
 
-app.get("/", (req, res) => {
-    res.render("index.ejs", {books: booksObject});
+async function worst(){
+    const result = await db.query("select * from booksdata order by rating asc");
+    const bookItems = result.rows;
+    return bookItems;
+}
+
+async function filter(sort , catagory){
+    if(sort){
+
+    }
+}
+
+app.get("/", async (req, res) => {
+    const result = await best();
+    res.render("index.ejs", {books: result});
 });
 
 app.get("/contact", (req, res) => {
@@ -60,9 +68,10 @@ app.get("/signup", (req, res) => {
     res.render("signup.ejs");
 });
 
-app.get("/book/:id", (req, res)=>{
+app.get("/book/:id", async(req, res)=>{
     const id = parseInt(req.params.id);
-    const notes = booksObject.find((item)=>item.id===id);
+    const result = await best();
+    const notes = result.find((item)=>item.id===id);
     res.render("notes.ejs",{book: notes});
 });
 
@@ -70,46 +79,47 @@ app.post("/new", (req, res) => {
     res.render("new.ejs");
 });
 
-app.post("/new/book", (req, res) => {
-
-    lastId = lastId+1;
-    const newIsbn = req.body.isbn;
-    const numIsbn = parseInt(newIsbn);
-    const addDate = new Date();
-    const data = {
-        id: lastId,
-        isbn: newIsbn,
-        title: req.body.title,
-        catagory: req.body.catagory,
-        notes: req.body.notes,
-        rating: req.body.rating,
-        date: addDate,
-    }
-    booksObject.push(data);
+app.post("/new/book", async (req, res) => {
+    const isbn = req.body.isbn;
+    const title = req.body.title;
+    const catagory = req.body.catagory;
+    const notes = req.body.notes;
+    const rating = parseInt(req.body.rating);
+    let date = new Date();
+    const result = await db.query("insert into booksdata (isbn, title, catagory, notes, rating, date) values ($1, $2, $3, $4, $5, $6)",
+        [isbn, title, catagory, notes, rating, date]);
     res.redirect("/");
 });
 
-app.get("/book/edit/:id", (req, res)=>{
+app.get("/book/edit/:id", async(req, res)=>{
     const id = parseInt(req.params.id);
-    const needToSee = booksObject.find((item)=>item.id===id);
+    const result = await best();
+    const needToSee = result.find((item)=>item.id===id);
     res.render("new.ejs", {bookdata: needToSee,});
 });
 
-app.post("/book/edited/:id", (req, res) => {
+app.post("/book/edited/:id", async (req, res) => {
     const id = parseInt(req.params.id);
-    const existingBook = booksObject.find((item)=>item.id ===id);
-    if(req.body.isbn) existingBook.isbn = req.body.isbn;
-    if(req.body.title) existingBook.title = req.body.title;
-    if(req.body.catagory) existingBook.catagory = req.body.catagory;
-    if(req.body.notes) existingBook.notes = req.body.notes;
-    if(req.body.rating) existingBook.rating = req.body.rating;
+    const isbn = req.body.isbn;
+    const title = req.body.title;
+    const catagory = req.body.catagory;
+    const notes = req.body.notes;
+    const rating = parseInt(req.body.rating);
+    const result = await db.query("update booksdata set isbn= $1, title= $2 , catagory= $3 , notes= $4 , rating= $5 where id = $6;",
+        [isbn, title, catagory, notes, rating, id]);
     res.redirect("/");
 });
 
-app.get("/book/delete/:id", (req, res) =>{
-    const searchIndex = booksObject.findIndex((item)=>item.id===parseInt(req.params.id));
-    booksObject.splice(searchIndex, 1);
+app.get("/book/delete/:id", async(req, res) =>{
+    const id = parseInt(req.params.id);
+    const result = await db.query("delete from booksdata where id = $1", [id]);
     res.redirect("/");
+});
+
+app.get("/book/filter", async(req, res) =>{
+    const sort = req.body.sort;
+    const catagory = req.body.catagory;
+
 });
 
 app.listen(3000, ()=>{

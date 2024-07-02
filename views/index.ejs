@@ -1,19 +1,21 @@
 <body>
 <%- include("partials/header.ejs") %>
-<div class="catagory">
+<form class="catagory" method="get" action="/book/filter">
     <div class="catagory-sort">
         <label for="sort">Sort :</label>
         <select name="sort" id="sort">
+            <option value="best">Best</option>
             <option value="asce">Accending</option>
             <option value="desc">Decending</option>
-            <option value="date">Best</option>
+            <option value="worst">Worst</option>
             <option value="latest">Latest</option>
-            <option value="latest">Oldest</option>
+            <option value="oldest">Oldest</option>
         </select>
     </div>
     <div class="catagory-filter">
         <label for="filter">Filter :</label>
-        <select name="filter" id="filter">
+        <select name="catagory" id="filter">
+                <option value="all">all</option>
             <% books.forEach(book=>{ %>
                 <option value="<%= book.catagory %>"><%= book.catagory %></option>
             <% }) %>
@@ -22,10 +24,9 @@
         </select>
     </div>
     <div class="catagory-apply">
-        <button class="catagory-apply__btn">apply</button>
+        <button class="catagory-apply__btn" type="submit">apply</button>
     </div>
-  
-</div>
+</form>
 
 <div class="search">
     <input type="text" placeholder="Search">
