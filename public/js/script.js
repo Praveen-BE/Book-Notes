@@ -29,3 +29,21 @@ navLinks.forEach(link =>{
             link.classList.add("active");
         }
 });
+
+const tempSort = document.getElementById('sort').classList.value;
+var mySort = document.getElementById('sort');
+for(var i, j = 0; i = mySort.options[j]; j++) {
+    if(i.value == tempSort) {
+        mySort.selectedIndex = j;
+        break;
+    }
+}
+
+const tempCata = document.getElementById('filter').classList.value;
+var myCatagory = document.getElementById('filter');
+for(var i, j = 0; i = myCatagory.options[j]; j++) {
+    if(i.value == tempCata) {
+        myCatagory.selectedIndex = j;
+        break;
+    }
+}

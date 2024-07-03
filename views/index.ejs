@@ -1,11 +1,11 @@
 <body>
 <%- include("partials/header.ejs") %>
-<form class="catagory" method="get" action="/book/filter">
-    <div class="catagory-sort">
+<form class="catagory" method="get" action="/filterBook/filter">
+    <div class="catagory-sort" id="sortValue" >
         <label for="sort">Sort :</label>
-        <select name="sort" id="sort">
+        <select name="sort" id="sort" class="<%= sort %>">
             <option value="best">Best</option>
-            <option value="asce">Accending</option>
+            <option value="asc">Accending</option>
             <option value="desc">Decending</option>
             <option value="worst">Worst</option>
             <option value="latest">Latest</option>
@@ -14,10 +14,10 @@
     </div>
     <div class="catagory-filter">
         <label for="filter">Filter :</label>
-        <select name="catagory" id="filter">
+        <select name="catagory" id="filter" class="<%= catagory %>">
                 <option value="all">all</option>
-            <% books.forEach(book=>{ %>
-                <option value="<%= book.catagory %>"><%= book.catagory %></option>
+            <% cataAll.forEach(bookCata=>{ %>
+                <option value="<%= bookCata %>"><%= bookCata %></option>
             <% }) %>
             <!-- <option value="fiction">Fiction</option>
             <option value="finance">Finance</option> -->

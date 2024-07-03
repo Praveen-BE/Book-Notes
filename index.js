@@ -25,27 +25,83 @@ const db = new pg.Client({
 });
 db.connect();
 
-async function best(){
-    const result = await db.query("select * from booksdata order by rating desc");
-    const bookItems = result.rows;
-    return bookItems;
+async function best(cata){
+    if(cata=='all'){
+        const result = await db.query("select * from booksdata order by rating desc;");
+        const bookItems = result.rows;
+        return bookItems;
+    } else {
+        const result = await db.query("select * from booksdata where catagory = $1 order by rating desc;",[cata]);
+        const bookItems = result.rows;
+        return bookItems;
+    }
 }
 
-async function worst(){
-    const result = await db.query("select * from booksdata order by rating asc");
-    const bookItems = result.rows;
-    return bookItems;
+async function worst(cata){
+    if(cata=='all'){
+        const result = await db.query("select * from booksdata order by rating asc;");
+        const bookItems = result.rows;
+        return bookItems;
+    } else {
+        const result = await db.query("select * from booksdata where catagory = $1 order by rating asc;",[cata]);
+        const bookItems = result.rows;
+        return bookItems;
+    }
 }
-
-async function filter(sort , catagory){
-    if(sort){
-
+async function latest(cata){
+    if(cata=='all'){
+        const result = await db.query("select * from booksdata order by date asc;");
+        const bookItems = result.rows;
+        return bookItems;
+    } else {
+        const result = await db.query("select * from booksdata where catagory = $1 order by date asc;",[cata]);
+        const bookItems = result.rows;
+        return bookItems;
+    }
+}
+async function oldest(cata){
+    if(cata=='all'){
+        const result = await db.query("select * from booksdata order by date desc;");
+        const bookItems = result.rows;
+        return bookItems;
+    } else {
+        const result = await db.query("select * from booksdata where catagory = $1 order by date desc;",[cata]);
+        const bookItems = result.rows;
+        return bookItems;
+    }
+}
+async function acending(cata){
+    if(cata=='all'){
+        const result = await db.query("select * from booksdata order by title asc;");
+        const bookItems = result.rows;
+        return bookItems;
+    } else {
+        const result = await db.query("select * from booksdata where catagory = $1 order by title asc;",[cata]);
+        const bookItems = result.rows;
+        return bookItems;
+    }
+}
+async function decending(cata){
+    if(cata=='all'){
+        const result = await db.query("select * from booksdata order by title desc;");
+        const bookItems = result.rows;
+        return bookItems;
+    } else {
+        const result = await db.query("select * from booksdata where catagory = $1 order by title desc;",[cata]);
+        const bookItems = result.rows;
+        return bookItems;
     }
 }
 
 app.get("/", async (req, res) => {
-    const result = await best();
-    res.render("index.ejs", {books: result});
+    const result = await best('all');
+    const sortValue = 'best';
+    const catagoryValue = 'all';
+    const cataResult = await acending('all');
+    let catagoryList = [];
+    cataResult.forEach((item)=>catagoryList.push(item.catagory));
+    // console.log(catagoryList);
+    res.render("index.ejs", {books: result, sort:sortValue, catagory: catagoryValue, cataAll: catagoryList});
 });
 
 app.get("/contact", (req, res) => {
@@ -116,10 +172,44 @@ app.get("/book/delete/:id", async(req, res) =>{
     res.redirect("/");
 });
 
-app.get("/book/filter", async(req, res) =>{
-    const sort = req.body.sort;
-    const catagory = req.body.catagory;
+async function filterBooks(gory, sort){
+        if(sort=='best'){
+            // console.log(gory)
+            const result = await best(gory);
+            return result;
+        } 
+        else if(sort=='worst'){
+            const result = await worst(gory);
+            return result;
+        }
+        else if(sort=='latest'){
+            const result = await latest(gory);
+            return result;
+        }
+        else if(sort=='oldest'){
+            const result = await oldest(gory);
+            return result;
+        }
+        else if(sort=='asc'){
+            const result = await acending(gory);
+            return result;
+        }
+        else if(sort=='desc'){
+            const result = await decending(gory);
+            return result;
+        } else {
+            res.json("Error");
+        }
+}
 
+app.get("/filterBook/filter", async(req, res) =>{
+    const sortReq = req.query.sort;
+    const catagoryReq = req.query.catagory;
+    const result = await filterBooks(catagoryReq, sortReq);
+    const cataResult = await acending('all');
+    let catagoryList = [];
+    cataResult.forEach((item)=>catagoryList.push(item.catagory));
+    res.render("index.ejs", {books: result, sort: sortReq, catagory: catagoryReq, cataAll: catagoryList});
 });
 
 app.listen(3000, ()=>{
